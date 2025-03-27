@@ -5,21 +5,23 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Prisoner_Dylem.Players;
+using Prisoner_Dylem.Strategies;
 
 namespace Prisoner_Dylem
 {
     public class GameEngine
     {
-        public static Random random = new Random();
+        public static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
         private const byte RewardForCooperation = 3;
         private const byte PunishmentForDefection = 1;
         private const byte TemptationToDefect = 5;
         private byte rewardForFirstPlayer;
         private byte rewardForSecondPlayer;
-        Player firstPlayer {get;set;}
-        Player secondPlayer {get;set;}
+        Players.Player firstPlayer {get;set;}
+        Players.Player secondPlayer {get;set;}
 
-        public GameEngine(Player firstPlayer, Player secondPlayer)
+        public GameEngine(Players.Player firstPlayer, Players.Player secondPlayer)
         {
             this.firstPlayer = firstPlayer;
             this.secondPlayer = secondPlayer;
@@ -27,7 +29,7 @@ namespace Prisoner_Dylem
 
         public enum PlayerDecision
         {
-            Betraye,
+            Betray,
             Cooperate
         };
 
@@ -36,15 +38,15 @@ namespace Prisoner_Dylem
         {
             rounds = 100;
         }
-        public static int GetShance() => random.Next(0, 101);
+        public static int GetChance() => random.Value.Next(0, 100);
         public void PayoffMatrix()
         {
             (rewardForFirstPlayer, rewardForSecondPlayer) = (firstPlayer.currentDecision, secondPlayer.currentDecision) switch
             { 
                 (PlayerDecision.Cooperate, PlayerDecision.Cooperate) => (RewardForCooperation, RewardForCooperation),
-                (PlayerDecision.Betraye,  PlayerDecision.Betraye) => (PunishmentForDefection, PunishmentForDefection),
-                (PlayerDecision.Cooperate, PlayerDecision.Betraye) => (PunishmentForDefection, TemptationToDefect),
-                (PlayerDecision.Betraye, PlayerDecision.Cooperate) => (TemptationToDefect, PunishmentForDefection)
+                (PlayerDecision.Betray,  PlayerDecision.Betray) => (PunishmentForDefection, PunishmentForDefection),
+                (PlayerDecision.Cooperate, PlayerDecision.Betray) => (PunishmentForDefection, TemptationToDefect),
+                (PlayerDecision.Betray, PlayerDecision.Cooperate) => (TemptationToDefect, PunishmentForDefection)
             };
             firstPlayer.ChangePoints(rewardForFirstPlayer);
             secondPlayer.ChangePoints(rewardForSecondPlayer);

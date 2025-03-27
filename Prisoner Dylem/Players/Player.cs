@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Prisoner_Dylem.Strategies;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Prisoner_Dylem
+namespace Prisoner_Dylem.Players
 {
     public class Player
     {
@@ -16,7 +17,6 @@ namespace Prisoner_Dylem
         {
             Name = name;
             strategy = StrategyBuilder.StrategyBuild[getStrategy](betrayalProbability);
-
         }
 
         public void ChangePoints(int points) => _points += points;
