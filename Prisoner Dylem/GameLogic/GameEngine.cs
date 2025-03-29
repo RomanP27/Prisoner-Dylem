@@ -10,7 +10,7 @@ using Prisoner_Dylem.Strategies;
 
 namespace Prisoner_Dylem.GameLogic
 {
-    public class GameEngine
+    internal class GameEngine
     {
         public static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
         public const byte RewardForCooperation = 3;

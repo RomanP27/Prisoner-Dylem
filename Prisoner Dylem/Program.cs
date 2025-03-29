@@ -11,13 +11,14 @@ namespace Prisoner_Dylem
 
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Players.Player firstPlayer = new Players.Player(0, "AlwaysCooperate", "PureChance");
-            Players.Player secondPlayer = new Players.Player(50, "Random", "PureChance");
-            GameEngine gameEngine = new GameEngine(firstPlayer, secondPlayer);
-            GameEngine.GetNewCountOfRounds();
-            gameEngine.GameSession();
+                Player firstPlayer = new Player(0, "AlwaysCooperate", "PureChance");
+                Player secondPlayer = new Player(50, "Random", "PureChance");
+                GameSession gameSession = new GameSession(firstPlayer, secondPlayer);
+                gameSession.GetNewCountOfRounds();
+                await gameSession.GameStart();
+            
         }
     }
 }

@@ -8,9 +8,11 @@ using static Prisoner_Dylem.GameLogic.GameEngine;
 
 namespace Prisoner_Dylem.GameLogic
 {
-    class GameSession
+    internal class GameSession
     {
         public List<(PlayerDecision, PlayerDecision)> HistoryOfDecisions { get; private set; } = new List<(PlayerDecision, PlayerDecision)>();
+
+        public Logger Logger { get; private set; }
         public uint roundsForThisSession { get; private set; }
         public static uint rounds { get; private set; }
         public byte rewardForFirstPlayer { get; private set; }
@@ -21,43 +23,39 @@ namespace Prisoner_Dylem.GameLogic
         {
             this.firstPlayer = firstPlayer;
             this.secondPlayer = secondPlayer;
+            Logger = new Logger(this);
         }
-        private async Task WriteDownInHistory()
+        private void WriteDownInHistory()
         {
-            await Task.Run(() =>
-            {
                 HistoryOfDecisions.Add((firstPlayer.currentDecision, secondPlayer.currentDecision));
-            });
         }
         public void GetNewCountOfRounds()
         {
-            roundsForThisSession = 100;
+            rounds = 10;
         }
-        public async Task PayoffMatrix()
+        public void PayoffMatrix()
         {
-            await Task.Run(() =>
+            (rewardForFirstPlayer, rewardForSecondPlayer) = (firstPlayer.currentDecision, secondPlayer.currentDecision) switch
             {
-                (rewardForFirstPlayer, rewardForSecondPlayer) = (firstPlayer.currentDecision, secondPlayer.currentDecision) switch
-                {
-                    (PlayerDecision.Cooperate, PlayerDecision.Cooperate) => (RewardForCooperation, RewardForCooperation),
-                    (PlayerDecision.Betray, PlayerDecision.Betray) => (PunishmentForDefection, PunishmentForDefection),
-                    (PlayerDecision.Cooperate, PlayerDecision.Betray) => (PunishmentForDefection, TemptationToDefect),
-                    (PlayerDecision.Betray, PlayerDecision.Cooperate) => (TemptationToDefect, PunishmentForDefection),
-                    _ => throw new InvalidOperationException("Invalid decision")
-                };
-            });
+                (PlayerDecision.Cooperate, PlayerDecision.Cooperate) => (RewardForCooperation, RewardForCooperation),
+                (PlayerDecision.Betray, PlayerDecision.Betray) => (PunishmentForDefection, PunishmentForDefection),
+                (PlayerDecision.Cooperate, PlayerDecision.Betray) => (PunishmentForDefection, TemptationToDefect),
+                (PlayerDecision.Betray, PlayerDecision.Cooperate) => (TemptationToDefect, PunishmentForDefection),
+                _ => throw new InvalidOperationException("Invalid decision")
+            };
         }
         public async Task GameStart()
         {
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
+                roundsForThisSession = rounds;
                 while (roundsForThisSession > 0)
                 {
                     firstPlayer.MakeDecision();
                     secondPlayer.MakeDecision();
-                    await PayoffMatrix();
-                    await WriteDownInHistory();
-                    await LogsToConsole.ConsoleInformation(firstPlayer, secondPlayer, rewardForFirstPlayer, rewardForSecondPlayer);
+                    PayoffMatrix();
+                    WriteDownInHistory();
+                    Logger.LogInformation();
                     roundsForThisSession--;
                 }
                 Console.WriteLine($"Счёт первого игрока: {firstPlayer._points}\tСчёт второго игрока: {secondPlayer._points}");

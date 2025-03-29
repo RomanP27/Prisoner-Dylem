@@ -7,7 +7,7 @@ using Prisoner_Dylem.Strategies;
 
 namespace Prisoner_Dylem.GameLogic
 {
-    public static class StrategyBuilder
+    internal static class StrategyBuilder
     {
         public static Dictionary<string, Func<int, Strategy>> StrategyBuild = new Dictionary<string, Func<int, Strategy>>
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Prisoner_Dylem.Players
 {
-    public class Player
+    internal class Player
     {
         public string Name { get; }
         private Strategy strategy;

@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Prisoner_Dylem.Strategies
 {
-    public abstract class Strategy
+    internal abstract class Strategy
     {
         public abstract GameEngine.PlayerDecision Decision();
     }
-    public class PureChance : Strategy, InterfaceStrategies.IRandomChoiseModule
+    internal class PureChance : Strategy, InterfaceStrategies.IRandomChoiseModule
     {
         public int betrayChance { get; }
         public PureChance(int betrayalProbability) => betrayChance = betrayalProbability;
