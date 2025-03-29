@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Prisoner_Dylem.Strategies
 {
-    interface InterfaceStrategies
+    interface FirstLevelInterfacesOfStrategies
     {
         interface IRandomChoiseModule
-        {
+        { 
             public int betrayChance { get; }
             public GameEngine.PlayerDecision MakeRandomDecision()
             {
@@ -19,6 +19,13 @@ namespace Prisoner_Dylem.Strategies
                 int someChance = GameEngine.GetChance();
                 return someChance <= betrayChance ? GameEngine.PlayerDecision.Betray : GameEngine.PlayerDecision.Cooperate;
             }
+        }
+    }
+    interface SecondLevelInterfacesOfStrategies
+    {
+        interface IZAGOTOVKA
+        {
+            
         }
     }
 }
