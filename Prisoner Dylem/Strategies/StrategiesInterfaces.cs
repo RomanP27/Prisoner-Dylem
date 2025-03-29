@@ -9,15 +9,15 @@ namespace Prisoner_Dylem.Strategies
 {
     interface ZeroLevelInterfacesOfStrategies
     {
-        interface BetrayChanceModule
+        interface IBetrayChance
         {
             public int betrayChance { get; }
         }
     }
     interface FirstLevelInterfacesOfStrategies
     {
-        interface IRandomChoiseModule : ZeroLevelInterfacesOfStrategies.BetrayChanceModule
-        { 
+        interface IRandomChoiseModule : ZeroLevelInterfacesOfStrategies.IBetrayChance
+        {
             public GameEngine.PlayerDecision MakeRandomDecision()
             {
                 if (betrayChance == 100) return GameEngine.PlayerDecision.Betray;
@@ -27,11 +27,11 @@ namespace Prisoner_Dylem.Strategies
             }
         }
     }
-    interface SecondLevelInterfacesOfStrategies
+    interface SecondLevelInterfacesOfStrategies : ZeroLevelInterfacesOfStrategies.IBetrayChance
     {
-        interface IZAGOTOVKA
+        interface IRevengeModule
         {
-            
+
         }
     }
 }
