@@ -18,14 +18,6 @@ namespace Prisoner_Dylem
             Player secondPlayer = new Player(50, "Random", "PureChance");
             GameSession gameSession = new GameSession(firstPlayer, secondPlayer);
             gameSession.GetNewCountOfRounds(); await gameSession.GameStart();
-            Action action = () =>
-            {
-                foreach (var item in gameSession.HistoryOfDecisions)
-                {
-                    Console.WriteLine($"First player: {item.Item1}\tSecond player: {item.Item2}");
-                }
-            };
-            action();
         }
     }
 }
