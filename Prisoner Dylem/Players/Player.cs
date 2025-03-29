@@ -1,4 +1,5 @@
-﻿using Prisoner_Dylem.Strategies;
+﻿using Prisoner_Dylem.GameLogic;
+using Prisoner_Dylem.Strategies;
 using System;
 using System.Collections.Generic;
 using System.Linq;

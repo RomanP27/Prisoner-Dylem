@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Prisoner_Dylem.Strategies;
 
-namespace Prisoner_Dylem
+namespace Prisoner_Dylem.GameLogic
 {
     public static class StrategyBuilder
     {

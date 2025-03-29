@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prisoner_Dylem.GameLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -15,7 +16,6 @@ namespace Prisoner_Dylem.Strategies
     {
         public int betrayChance { get; }
         public PureChance(int betrayalProbability) => betrayChance = betrayalProbability;
-        public override GameEngine.PlayerDecision Decision() => ((InterfaceStrategies.IRandomChoiseModule)this).Decision();
-        public GameEngine.PlayerDecision MakeRandomDecision() => ((InterfaceStrategies.IRandomChoiseModule)this).MakeRandomDecision();
+        public override GameEngine.PlayerDecision Decision() => ((InterfaceStrategies.IRandomChoiseModule)this).MakeRandomDecision();
     }
 }
