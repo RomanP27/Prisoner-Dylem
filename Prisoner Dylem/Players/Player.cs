@@ -21,7 +21,6 @@ namespace Prisoner_Dylem.Players
             strategy = StrategyBuilder.StrategyBuild[getStrategy](betrayalProbability);
         }
         public void ChangePoints(int points) => _points += points;
-
         public void MakeDecision()
         {
             currentDecision = strategy.Decision();

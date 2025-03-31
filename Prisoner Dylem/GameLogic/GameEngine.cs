@@ -16,6 +16,7 @@ namespace Prisoner_Dylem.GameLogic
         public const byte RewardForCooperation = 3;
         public const byte PunishmentForDefection = 1;
         public const byte TemptationToDefect = 5;
+        public static uint rounds { get; private set; }
 
         public enum PlayerDecision
         {
@@ -27,6 +28,10 @@ namespace Prisoner_Dylem.GameLogic
         {
             firstPlayer.ChangePoints(rewardForFirstPlayer);
             secondPlayer.ChangePoints(rewardForSecondPlayer);
+        }
+        public void GetNewCountOfRounds()
+        {
+            rounds = 10;
         }
     }
 }
