@@ -1,4 +1,5 @@
 ﻿using Prisoner_Dylem.Players;
+using Prisoner_Dylem.Strategies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,8 @@ namespace Prisoner_Dylem.GameLogic
 {
     internal class GameSession
     {
-        public List<(PlayerDecision, PlayerDecision)> HistoryOfDecisions { get; private set; } = new List<(PlayerDecision, PlayerDecision)>();
-
+        public List<PlayerDecision>? HistoryOfFirstPlayer { get; private set; }
+        public List<PlayerDecision>? HistoryOfSecondPlayer { get; private set; }
         public Logger Logger { get; private set; }
         public uint roundsForThisSession { get; private set; }
         public static uint rounds { get; private set; }
@@ -22,12 +23,17 @@ namespace Prisoner_Dylem.GameLogic
         public GameSession(Player firstPlayer, Player secondPlayer)
         {
             this.firstPlayer = firstPlayer;
+            this.firstPlayer.strategy.SetPosition(0);
             this.secondPlayer = secondPlayer;
+            this.secondPlayer.strategy.SetPosition(1);
             Logger = new Logger(this);
+            HistoryOfSecondPlayer = firstPlayer.strategy is ZeroLevelInterfacesOfStrategies.IRememberOpponentDecisionsModule ? new List<PlayerDecision>() : null;
+            HistoryOfFirstPlayer = secondPlayer.strategy is ZeroLevelInterfacesOfStrategies.IRememberOpponentDecisionsModule ? new List<PlayerDecision>() : null;
         }
         private void WriteDownInHistory()
         {
-                HistoryOfDecisions.Add((firstPlayer.currentDecision, secondPlayer.currentDecision));
+            HistoryOfFirstPlayer?.Add(firstPlayer.currentDecision);
+            HistoryOfSecondPlayer?.Add(secondPlayer.currentDecision);
         }
         public void GetNewCountOfRounds()
         {
@@ -43,6 +49,8 @@ namespace Prisoner_Dylem.GameLogic
                 (PlayerDecision.Betray, PlayerDecision.Cooperate) => (TemptationToDefect, PunishmentForDefection),
                 _ => throw new InvalidOperationException("Invalid decision")
             };
+            firstPlayer.ChangePoints(rewardForFirstPlayer);
+            secondPlayer.ChangePoints(rewardForSecondPlayer);
         }
         public async Task GameStart()
         {

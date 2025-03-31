@@ -4,19 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Prisoner_Dylem.Players;
 
 namespace Prisoner_Dylem.Strategies
 {
     interface ZeroLevelInterfacesOfStrategies
     {
-        interface IBetrayChance
+        interface IBetrayChanceModule
         {
-            public int betrayChance { get; }
+            protected int betrayChance { get; }
+        }
+        interface IRememberOpponentDecisionsModule
+        {
+            protected List<GameEngine.PlayerDecision> rememberedDecisions { get; }
+
+            protected int positionInSession { get; }
         }
     }
     interface FirstLevelInterfacesOfStrategies
     {
-        interface IRandomChoiseModule : ZeroLevelInterfacesOfStrategies.IBetrayChance
+        interface IRandomChoiseModule : ZeroLevelInterfacesOfStrategies.IBetrayChanceModule
         {
             public GameEngine.PlayerDecision MakeRandomDecision()
             {
@@ -27,7 +34,7 @@ namespace Prisoner_Dylem.Strategies
             }
         }
     }
-    interface SecondLevelInterfacesOfStrategies : ZeroLevelInterfacesOfStrategies.IBetrayChance
+    interface SecondLevelInterfacesOfStrategies : ZeroLevelInterfacesOfStrategies.IBetrayChanceModule
     {
         interface IRevengeModule
         {
