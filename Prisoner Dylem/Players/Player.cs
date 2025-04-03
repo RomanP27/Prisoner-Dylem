@@ -13,14 +13,20 @@ namespace Prisoner_Dylem.Players
     {
         public string Name { get; }
         public Strategy strategy { get; }
-        public int _points { get; private set; } = 0;
+        public int points { get; private set; } = 0;
+        public int pointForCurrentRound { get; private set; } = 0;
         public GameEngine.PlayerDecision currentDecision { get; private set; }
         public Player(int betrayalProbability, string name, string getStrategy)
         {
             Name = name;
             strategy = StrategyBuilder.StrategyBuild[getStrategy](betrayalProbability);
         }
-        public void ChangePoints(int points) => _points += points;
+        public void ChangePoints()
+        {
+            points += pointForCurrentRound;
+            pointForCurrentRound = 0;
+        }
+        public void ChangePointsForCurrentRound(int points) => pointForCurrentRound += points;
         public void MakeDecision()
         {
             currentDecision = strategy.Decision();

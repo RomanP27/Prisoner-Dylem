@@ -13,8 +13,6 @@ namespace Prisoner_Dylem.GameLogic
     {
         /*
          * Короче будет весело. 
-        1. Перенести в GameEngine все константы и методы, которые не имеют отношения к GameSession.
-        2. Создать в GameEngine enum с уникальными ключами для игроков.
         3. Создать общий dictionary, где ключ - ключ игрока, а значение - лист его выборов.
         4. В GameSession создать метод, который будет записывать в dictionary выборы игроков.
         5. Передавать в методы\интерфейсы this GameSession для работы с dictionary.
@@ -34,12 +32,15 @@ namespace Prisoner_Dylem.GameLogic
         public GameSession(Player firstPlayer, Player secondPlayer)
         {
             this.firstPlayer = firstPlayer;
-            this.firstPlayer.strategy.SetPosition(0);
             this.secondPlayer = secondPlayer;
-            this.secondPlayer.strategy.SetPosition(1);
             Logger = new Logger(this);
             HistoryOfSecondPlayer = firstPlayer.strategy is ZeroLevelInterfacesOfStrategies.IRememberOpponentDecisionsModule ? new List<PlayerDecision>() : null;
             HistoryOfFirstPlayer = secondPlayer.strategy is ZeroLevelInterfacesOfStrategies.IRememberOpponentDecisionsModule ? new List<PlayerDecision>() : null;
+        }
+        public void SetRewards(byte rewardForFirstPlayer, byte rewardForSecondPlayer)
+        {
+            this.rewardForFirstPlayer = rewardForFirstPlayer;
+            this.rewardForSecondPlayer = rewardForSecondPlayer;
         }
         private void WriteDownInHistory()
         {
@@ -47,18 +48,6 @@ namespace Prisoner_Dylem.GameLogic
             HistoryOfSecondPlayer?.Add(secondPlayer.currentDecision);
         }
 
-        public void PayoffMatrix() //перенести в GameEngine
-        {
-            (rewardForFirstPlayer, rewardForSecondPlayer) = (firstPlayer.currentDecision, secondPlayer.currentDecision) switch
-            {
-                (PlayerDecision.Cooperate, PlayerDecision.Cooperate) => (RewardForCooperation, RewardForCooperation),
-                (PlayerDecision.Betray, PlayerDecision.Betray) => (PunishmentForDefection, PunishmentForDefection),
-                (PlayerDecision.Cooperate, PlayerDecision.Betray) => (PunishmentForDefection, TemptationToDefect),
-                (PlayerDecision.Betray, PlayerDecision.Cooperate) => (TemptationToDefect, PunishmentForDefection),
-                _ => throw new InvalidOperationException("Invalid decision")
-            };
-            SetPoints(firstPlayer, secondPlayer, rewardForFirstPlayer, rewardForSecondPlayer);
-        }
         public async Task GameStart()
         {
             await Task.Run(() =>
@@ -68,12 +57,13 @@ namespace Prisoner_Dylem.GameLogic
                 {
                     firstPlayer.MakeDecision();
                     secondPlayer.MakeDecision();
-                    PayoffMatrix();
+                    PayoffMatrix(this);
                     WriteDownInHistory();
                     Logger.LogInformation();
                     roundsForThisSession--;
                 }
-                Console.WriteLine($"Счёт первого игрока: {firstPlayer._points}\tСчёт второго игрока: {secondPlayer._points}");
+                SetPoints(firstPlayer, secondPlayer);
+                Console.WriteLine($"Счёт первого игрока: {firstPlayer.points}\tСчёт второго игрока: {secondPlayer.points}");
             });
         }
     }

@@ -17,7 +17,8 @@ namespace Prisoner_Dylem
             Player firstPlayer = new Player(0, "AlwaysCooperate", "PureChance");
             Player secondPlayer = new Player(50, "Random", "PureChance");
             GameSession gameSession = new GameSession(firstPlayer, secondPlayer);
-            gameSession.GetNewCountOfRounds(); await gameSession.GameStart();
+            GameEngine.GetNewCountOfRounds();
+            await gameSession.GameStart();
         }
     }
 }

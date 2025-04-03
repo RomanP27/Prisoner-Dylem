@@ -12,13 +12,7 @@ namespace Prisoner_Dylem.Strategies
     {
 
         public int betrayChance { get; protected set; }
-
-        protected int positionInSession { get; private set; }
         public abstract GameEngine.PlayerDecision Decision();
-
-        public void SetPosition(int position) => positionInSession = position;
-
-        public int GetPosition() => positionInSession;
     }
     internal class PureChance : Strategy, FirstLevelInterfacesOfStrategies.IRandomChoiseModule
     {
