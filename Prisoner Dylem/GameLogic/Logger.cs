@@ -15,12 +15,24 @@ namespace Prisoner_Dylem.GameLogic
         {
             this.gameSession = gameSession;
         }
+        StringBuilder message = new StringBuilder();
+        
         public void LogInformation()
         {
-            string firstMessage = gameSession.firstPlayer.currentDecision.ToString();
-            string secondMessage = gameSession.secondPlayer.currentDecision.ToString();
-            string message = $"Выбор первого игрока: {firstMessage}\tВыбор второго игрока: {secondMessage}.\nПервый игрок получил {gameSession.rewardForFirstPlayer}\tВторой игрок получил {gameSession.rewardForSecondPlayer}";
-            Console.WriteLine(message);
+            message.Clear();
+            message.AppendFormat("Выбор первого игрока: {0}\tВыбор второго игрока: {1}\n",
+                gameSession.firstPlayer.currentDecision, gameSession.secondPlayer.currentDecision);
+            message.AppendFormat("Первый игрок получил {0}\tВторой игрок получил {1}\n",
+                gameSession.rewardForFirstPlayer, gameSession.rewardForSecondPlayer);
+
+            Console.WriteLine(message.ToString());
+        }
+        public void FinalMessage()
+        {
+            message.Clear();
+            message.AppendFormat("Счёт первого игрока: {0}\tСчёт второго игрока: {1}\n",
+                gameSession.firstPlayer.points, gameSession.secondPlayer.points);
+            Console.WriteLine(message.ToString());
         }
     }
 }
