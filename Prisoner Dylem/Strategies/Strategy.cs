@@ -13,7 +13,9 @@ namespace Prisoner_Dylem.Strategies
     {
 
         private bool currentSessionIsGoing;
-        public GameEngine.PlayerID playerID
+
+        private GameEngine.PlayerID playerID;
+        public GameEngine.PlayerID PlayerID
         {
             get { return playerID; }
             set

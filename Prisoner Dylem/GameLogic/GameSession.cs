@@ -20,9 +20,9 @@ namespace Prisoner_Dylem.GameLogic
         public GameSession(Player firstPlayer, Player secondPlayer)
         {
             this.firstPlayer = firstPlayer;
-            firstPlayer.strategy.playerID = GameEngine.PlayerID.FirstPlayer;
+            firstPlayer.strategy.PlayerID = GameEngine.PlayerID.FirstPlayer;
             this.secondPlayer = secondPlayer;
-            secondPlayer.strategy.playerID = GameEngine.PlayerID.SecondPlayer;
+            secondPlayer.strategy.PlayerID = GameEngine.PlayerID.SecondPlayer;
             Logger = new Logger(this);
             SessionHistory sessionHistory = new SessionHistory();
         }
@@ -33,8 +33,8 @@ namespace Prisoner_Dylem.GameLogic
         }
         private void WriteDownInHistory()
         {
-            sessionHistory.AddDecision(firstPlayer.strategy.playerID, firstPlayer.currentDecision);
-            sessionHistory.AddDecision(secondPlayer.strategy.playerID, secondPlayer.currentDecision);
+            sessionHistory.AddDecision(firstPlayer.strategy.PlayerID, firstPlayer.currentDecision);
+            sessionHistory.AddDecision(secondPlayer.strategy.PlayerID, secondPlayer.currentDecision);
         }
 
         public async Task GameStart()
